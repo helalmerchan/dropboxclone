@@ -37,13 +37,13 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const [setIsDeleteModalOpen, setFileId, setFilename, setIsRenameModalOpen] = 
+  const [setIsDeleteModalOpen, setFileId, setFilename, setIsRenameModalOpen] =
     useAppStore(state => [
-    state.setIsDeleteModalOpen,
-    state.setFileId,
-    state.setFilename,  
-    state.setIsRenameModalOpen
-  ]);
+      state.setIsDeleteModalOpen,
+      state.setFileId,
+      state.setFilename,
+      state.setIsRenameModalOpen
+    ]);
 
   const openDeleteModal = (fileId: string) => {
     setFileId(fileId);
@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({
     setFileId(fileId);
     setFilename(filename);
     setIsRenameModalOpen(true);
-  }
+  };
 
   return (
     <div className="rounded-md border">
@@ -68,9 +68,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 )
               })}
@@ -84,20 +84,20 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
-                <DeleteModal/>
-                <RenameModal/>
-
+                <DeleteModal />
+                <RenameModal />
+                {/* RENAMEMODAL */}
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {cell.column.id === 'timestamp' ? (
-                        <div className="flex flex-col">
-                          <div className="text-sm">
-                            {(cell.getValue() as Date).toLocaleDateString()}
-                          </div>
-                          <div className="text-xs text-grey-500 ">
+                      <div className="flex flex-col">
+                        <div className="text-sm">
                           {(cell.getValue() as Date).toLocaleDateString()}
-                          </div>
                         </div>
+                        <div className="text-xs text-gray-500 ">
+                          {(cell.getValue() as Date).toLocaleTimeString()}
+                        </div>
+                      </div>
                     ) : cell.column.id === 'filename' ? (
                       <p onClick={() => {
                         // console.log("hello");
@@ -106,25 +106,25 @@ export function DataTable<TData, TValue>({
                           (row.original as FileType).filename,
                         )
                       }}
-                      className="underline flex items-center text-blue-500 hover:cursor-pointer"
+                        className="underline flex items-center text-blue-500 hover:cursor-pointer"
                       >
-                        {cell.getValue() as string}{""}
+                        {cell.getValue() as string}{" "}
                         <PencilIcon size={15} className="ml-2" />
                       </p>
                     ) : (
                       flexRender(cell.column.columnDef.cell, cell.getContext())
-                    )}                    
+                    )}
                   </TableCell>
                 ))}
 
                 <TableCell key={(row.original as FileType).id}>
-                  <Button variant={"outline"} 
-                   onClick={() => {
-                    // console.log("delete");
-                    openDeleteModal((row.original as FileType).id)
-                   
-                   }} >
-                    <TrashIcon size={20}/>
+                  <Button variant={"outline"}
+                    onClick={() => {
+                      // console.log("delete");
+                      openDeleteModal((row.original as FileType).id)
+
+                    }} >
+                    <TrashIcon size={20} />
                   </Button>
                 </TableCell>
               </TableRow>

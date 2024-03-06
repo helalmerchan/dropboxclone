@@ -4,10 +4,10 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'www.shareicon.net'
-            }
-        ]
-    }
-}
+                hostname: 'www.shareicon.net',
+            },
+        ],
+    },
+};
 
 module.exports = nextConfig

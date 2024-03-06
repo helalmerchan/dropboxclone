@@ -7,7 +7,7 @@ import { collection, getDocs } from "firebase/firestore";
 
 
 async function Dashboard() {
-  const {userId} = auth();
+  const { userId } = auth();
   const docsResults = await getDocs(collection(db, "users", userId!, "files"));
   const skeletonFiles: FileType[] = docsResults.docs.map(doc => ({
     id: doc.id,
@@ -16,19 +16,19 @@ async function Dashboard() {
     fullName: doc.data().fullName,
     downloadURL: doc.data().downloadURL,
     type: doc.data().type,
-    size: doc.data().size
+    size: doc.data().size,
   }));
 
   // console.log(skeletonFiles);
 
-  return (  
+  return (
     <div className="border-t">
       <Dropzone />
 
       <section className=" container space-y-5 ">
         <h2 className="font-bold">All Files</h2>
         <div>
-          <TableWrapper skeletonFiles={skeletonFiles}/>
+          <TableWrapper skeletonFiles={skeletonFiles} />
         </div>
       </section>
     </div>

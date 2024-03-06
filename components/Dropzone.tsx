@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 
 function DropZone() {
   const [loading, setLoading] = useState(false);
-  const { isLoaded, isSignedIn, user} = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
 
   const onDrop = (acceptedFiles: File[]) => {
     acceptedFiles.forEach((file) => {
@@ -19,24 +19,24 @@ function DropZone() {
       reader.onabort = () => console.log("File reading was aborted");
       reader.onerror = () => console.log("File reading was failed");
 
-      reader.onload = async () =>{
+      reader.onload = async () => {
         await uploadPost(file);
       };
-      reader.readAsArrayBuffer(file)
+      reader.readAsArrayBuffer(file);
     });
   };
 
-  const uploadPost = async (selectedFile: File) =>{
-    if(loading) return;
-    if(!user) return;
+  const uploadPost = async (selectedFile: File) => {
+    if (loading) return;
+    if (!user) return;
 
     const toastId = toast.loading("Uploading...");
-    
+
     setLoading(true);
 
     //do what need to be done
     //users/user1514/files
-    const docRef = await addDoc(collection( db, "users", user.id, "files" ), {
+    const docRef = await addDoc(collection(db, "users", user.id, "files"), {
       userId: user.id,
       filename: selectedFile.name,
       fullName: user.fullName,
@@ -57,7 +57,7 @@ function DropZone() {
     });
 
     toast.success("Uploaded successfully", {
-        id: toastId
+      id: toastId
     })
 
     setLoading(false);
@@ -69,34 +69,35 @@ function DropZone() {
   return (
     <DropzoneComponent minSize={0} maxSize={maxSize} onDrop={onDrop}>
       {({
-        getRootProps, 
+        getRootProps,
         getInputProps,
         isDragActive,
         isDragReject,
-        fileRejections
+        fileRejections,
       }) => {
-        const isFileTooLarge = 
-        fileRejections.length > 0 && fileRejections[0].file.size > maxSize;
+        const isFileTooLarge =
+          fileRejections.length > 0 && fileRejections[0].file.size > maxSize;
         return (
-            <section className="m-4">
+          <section className="m-4">
             <div {...getRootProps()}
-            className={cn(
-              "w-full h-52 flex justify-center items-center p-5 border border-dashed rounded-lg text-center,",
-              isDragActive 
-              ? "bg-[#035FFE] text-white animate-pulse" 
-              : "bg-slate-100/50 dark:bg-slate-800/80 text-slate-400"
-            
-            )}>
-                <input {...getInputProps()} />
-                {!isDragActive && "Click here or drag  a file to upload"}
-                {isDragActive && !isDragReject && "Drop to upload the file"}
-                {isDragReject && "File type not accepted, sorry!"}
-                {isFileTooLarge && (
-                  <div className="text-danger mt-2">File is too Large.</div>
-                )}
+              className={cn(
+                "w-full h-52 flex justify-center items-center p-5 border border-dashed rounded-lg text-center,",
+                isDragActive
+                  ? "bg-[#035FFE] text-white animate-pulse"
+                  : "bg-slate-100/50 dark:bg-slate-800/80 text-slate-400"
+
+              )}>
+              <input {...getInputProps()} />
+              {!isDragActive && "Click here or drag  a file to upload"}
+              {isDragActive && !isDragReject && "Drop to upload the file"}
+              {isDragReject && "File type not accepted, sorry!"}
+              {isFileTooLarge && (
+                <div className="text-danger mt-2">File is too Large.</div>
+              )}
             </div>
-            </section>
-        )}}
+          </section>
+        )
+      }}
     </DropzoneComponent>
   )
 }
